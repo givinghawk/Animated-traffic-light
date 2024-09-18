@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Traffic Light with Pole</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #ffffff url(/pexels-pixabay-56832.jpg) center center/cover no-repeat;
+        }
+        #trafficLight {
+            background: linear-gradient(145deg, #a0a0a0, #ffffff);
+            border-radius: 12px;
+            box-shadow: 5px 5px 10px #b0b0b0,
+                        -5px -5px 10px #ffffff;
+        }
+        .light {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glow {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 
+                        0 0 30px rgba(255, 255, 255, 0.6);
+        }
+        .red-glow {
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7), 
+                        0 0 30px rgba(255, 0, 0, 0.7);
+        }
+        .amber-glow {
+            box-shadow: 0 0 20px rgba(255, 165, 0, 0.7), 
+                        0 0 30px rgba(255, 165, 0, 0.7);
+        }
+        .green-glow {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7), 
+                        0 0 30px rgba(0, 255, 0, 0.7);
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center h-screen">
+    <div class="flex flex-col items-center">
+        <div id="trafficLight" class="rounded-2xl grid grid-cols-1 gap-3 w-20 justify-items-center p-4 border-black border-4">
+            <div id="redLight" class="light rounded-full w-6 h-6 bg-red-200"></div>
+            <div id="amberLight" class="light rounded-full w-6 h-6 bg-yellow-200"></div>
+            <div id="greenLight" class="light rounded-full w-6 h-6 bg-green-200"></div>
+        </div>
+        <div class="w-5 h-40 bg-gray-600 border-x-4 border-b-0 border-black"></div>
+        <div class="w-16 h-4 bg-gray-600 rounded-b-lg border-4 border-t-3 border-black"></div>
+    </div>
+
+    <script>
+        const sequence = [
+            { name: 'Red', lights: ['red'] },
+            { name: 'Red and Amber', lights: ['red', 'amber'] },
+            { name: 'Green', lights: ['green'] },
+            { name: 'Amber', lights: ['amber'] },
+            { name: 'Red', lights: ['red'] }
+        ];
+        let currentStep = 0;
+
+        function changeLight() {
+            // Turn off all lights
+            document.getElementById('redLight').className = 'light rounded-full w-6 h-6 bg-red-200';
+            document.getElementById('amberLight').className = 'light rounded-full w-6 h-6 bg-yellow-200';
+            document.getElementById('greenLight').className = 'light rounded-full w-6 h-6 bg-green-200';
+
+            // Turn on current lights
+            const currentLights = sequence[currentStep].lights;
+            currentLights.forEach(light => {
+                const lightElement = document.getElementById(light + 'Light');
+                switch(light) {
+                    case 'red':
+                        lightElement.className = 'light rounded-full w-6 h-6 bg-red-500 red-glow';
+                        break;
+                    case 'amber':
+                        lightElement.className = 'light rounded-full w-6 h-6 bg-yellow-500 amber-glow';
+                        break;
+                    case 'green':
+                        lightElement.className = 'light rounded-full w-6 h-6 bg-green-500 green-glow';
+                        break;
+                }
+            });
+
+            // Log the current state
+            console.log('Current state:', sequence[currentStep].name);
+
+            // Move to next step
+            currentStep = (currentStep + 1) % sequence.length;
+        }
+
+        // Change light every 2 seconds
+        setInterval(changeLight, 2000);
+
+        // Initial light change
+        changeLight();
+    </script>
+</body>
+</html>
